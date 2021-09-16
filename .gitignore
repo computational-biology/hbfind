@@ -1,0 +1,4 @@
+*.o
+ctags
+/trash/*
+/test/*
