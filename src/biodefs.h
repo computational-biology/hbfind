@@ -36,7 +36,7 @@ enum polymer_type{
       ALL_TYPE
 };
 
-typedef struct{
+struct atom{
       // this data is reorganized to 
       // minimize cache miss
       Point3d center;
@@ -52,7 +52,7 @@ typedef struct{
       int model;
       char type; // A for atom H for hetatm.
       char altloc;
-}atom_t;
+};
 
 
 

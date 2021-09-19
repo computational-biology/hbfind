@@ -3,6 +3,20 @@
 //
 
 #include "geom3d.h"
+
+double torad(double deg)
+{
+    return ((PI * deg) / (double)180.0);
+
+}
+
+double todeg(double rad)
+{
+    return ((rad * 180) / (double)PI);
+
+}
+
+
 Vector3d vec3d_cross(Vector3d u, Vector3d v) {
       Vector3d result;
       result.x = (u.y * v.z - u.z * v.y);
@@ -83,9 +97,9 @@ void vec3d_dir_cosine(double* l, double* m, double* n, const Vector3d v){
 
 static Vector3d vec3d_matrix_product(Vector3d v, double matrix[][3]){
       Vector3d t;
-      for(int i=0; i<3; ++i){
-	    t.x = matrix[i][0] * v.x + matrix[i][1] * v.y + matrix[i][2] * v.z;
-      }
+      t.x = matrix[0][0] * v.x + matrix[0][1] * v.y + matrix[0][2] * v.z;
+      t.y = matrix[1][0] * v.x + matrix[1][1] * v.y + matrix[1][2] * v.z;
+      t.z = matrix[2][0] * v.x + matrix[2][1] * v.y + matrix[2][2] * v.z;
       return t;
 }
 Vector3d vec3d_polar_rotation(Vector3d polar_axis, Vector3d reference_normal, double tau){ 
@@ -96,12 +110,12 @@ Vector3d vec3d_polar_rotation(Vector3d polar_axis, Vector3d reference_normal, do
       double cos_tau = cos(tau);
       double sin_tau = sin(tau);
       double one_costau = 1.0 - cos_tau;
-      double a1 = l - sin_tau;
-      double a2 = m - sin_tau;
-      double a3 = n - sin_tau;
-      double b1 = m * n + one_costau;
-      double b2 = n * l + one_costau;
-      double b3 = l * m + one_costau;
+      double a1 = l * sin_tau;
+      double a2 = m * sin_tau;
+      double a3 = n * sin_tau;
+      double b1 = m * n * one_costau;
+      double b2 = n * l * one_costau;
+      double b3 = l * m * one_costau;
 
       double mat[3][3];
 
@@ -112,7 +126,7 @@ Vector3d vec3d_polar_rotation(Vector3d polar_axis, Vector3d reference_normal, do
       mat[1][1] = cos_tau + m * m * one_costau;
       mat[1][2] = b1 - a1;
       mat[2][0] = b2 - a2;
-      mat[2][1] = b1 - a1;
+      mat[2][1] = b1 + a1;
       mat[2][2] = cos_tau + n * n * one_costau;
       Vector3d t = vec3d_matrix_product(reference_normal, mat);
       return t;
@@ -130,10 +144,7 @@ double distsqr(const Point3d p, const Point3d q){
 //}
 Plane plane_create(Point3d a, Point3d b, Point3d c){
       Plane p;
-      Vector3d v1 = vec3d_create(a.x, a.y, a.z);
-      Vector3d v2 = vec3d_create(b.x, b.y, b.z);
-      Vector3d v3 = vec3d_create(c.x, c.y, c.z);
-      p.unit_normal = vec3d_unit(vec3d_cross(vec3d_sub(v2, v1), vec3d_sub(v3, v1)));
+      p.unit_normal = vec3d_unit(vec3d_cross(vec3d_sub(b, a), vec3d_sub(c, a)));
       p.point = a;
       return p;
 }

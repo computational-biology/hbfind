@@ -9,7 +9,12 @@
 
 #include <math.h>
 
-#define PI 3.1415926
+#define PI (3.1415926)
+
+double torad(double deg);
+
+
+double todeg(double rad);
 
 typedef struct{
       double x;

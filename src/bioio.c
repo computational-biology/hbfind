@@ -67,7 +67,7 @@ static void IUPAC_atom_loc(char* iupac, const char* loc, const char* symb){
 
 
 
-void print_pdb_line(FILE* fp, const atom_t* atom){
+void print_pdb_line(FILE* fp, const struct atom* atom){
       char tag[8];
       char iupacloc[6];
       char ins;
@@ -102,7 +102,7 @@ void print_pdb_line(FILE* fp, const atom_t* atom){
 }
 
 
-void printpdb(char* file_name, atom_t* atom_array, int size){
+void printpdb(char* file_name, struct atom* atom_array, int size){
 
       FILE	*fp;										/* output-file pointer */
 
@@ -126,11 +126,11 @@ void printpdb(char* file_name, atom_t* atom_array, int size){
 }
 
 
-static void insert_atom(atom_t** atomarray, int* index, int* max_size, atom_t atom){
-      atom_t* atomarr = *atomarray;
+static void insert_atom(struct atom** atomarray, int* index, int* max_size, struct atom atom){
+      struct atom* atomarr = *atomarray;
       if(*index == *max_size){
 	    *max_size *= 2;
-	    atomarr = (atom_t*) realloc ( atomarr, *max_size * sizeof(atom_t) );
+	    atomarr = (struct atom*) realloc ( atomarr, *max_size * sizeof(struct atom) );
 	    *atomarray = atomarr;
 
 	    if ( atomarr == NULL ) {
@@ -223,9 +223,9 @@ static int locate_model_pdb(FILE* fp, char* line, const char* modelno){
       return model;
 }
 
-static atom_t parse_pdb_line_to_atom(const char* line, int model){
+static struct atom parse_pdb_line_to_atom(const char* line, int model){
       char token[20];
-      atom_t atom;
+      struct atom atom;
       atom.type = line[0];
       strncpy(token, line+6,5);
       token[5] = '\0';
@@ -281,7 +281,7 @@ static atom_t parse_pdb_line_to_atom(const char* line, int model){
       return atom;
 }
 
-static int pdb_multi_occupancy(atom_t* atom, atom_t* buffer, atom_t* current, char rule){
+static int pdb_multi_occupancy(struct atom* atom, struct atom* buffer, struct atom* current, char rule){
       int select = 1;
       int reject = 0;
       if(  (buffer->altloc == ' ' || buffer->altloc == '.') ){
@@ -325,7 +325,7 @@ static int pdb_multi_occupancy(atom_t* atom, atom_t* buffer, atom_t* current, ch
 
 
 void scanpdb(const char* pdbfile, int (*pf)(char*), const char* chain, 
-	    const char* modelno, atom_t** atomary, int* size, enum polymer_type polytype, char occurule){
+	    const char* modelno, struct atom** atomary, int* size, enum polymer_type polytype, char occurule){
 
       FILE* fp	= fopen( pdbfile, "r" );
       if ( fp == NULL ) {
@@ -339,18 +339,18 @@ void scanpdb(const char* pdbfile, int (*pf)(char*), const char* chain,
       if(modelno != NULL){
 	    model = locate_model_pdb(fp, line, modelno); 
       }
-      atom_t* atomarr = NULL;
+      struct atom* atomarr = NULL;
       int atmindx = 0;
-      atom_t atom;
-      atom_t buffer = parse_pdb_line_to_atom(line, model);
+      struct atom atom;
+      struct atom buffer = parse_pdb_line_to_atom(line, model);
       while(!  ((modelno == NULL || buffer.model == model) && ((chain == NULL)||(strcmp(chain, buffer.chain) == 0)) && pf(buffer.resname) == 1)){
 	    if(fgets(line, 1024, fp) == NULL){
 		  goto final;
 	    }
 	    buffer = parse_pdb_line_to_atom(line, model);
       }
-      atom_t current;
-      atomarr = (atom_t*) malloc (max_size * sizeof(atom_t));
+      struct atom current;
+      atomarr = (struct atom*) malloc (max_size * sizeof(struct atom));
 
       while(fgets(line, 200, fp) != NULL && strncmp(line, "END", 3) != 0){
 	    if(strncmp(line, "ATOM", 4) != 0 && strncmp(line, "HETATM", 6) != 0){
@@ -368,7 +368,7 @@ void scanpdb(const char* pdbfile, int (*pf)(char*), const char* chain,
       }
 
       if((pf(buffer.resname) == 1) &&((chain == NULL) || (strcmp(chain,buffer.chain)== 0))){
-	    atom_t dummy;
+	    struct atom dummy;
 	    dummy.occu = ' ';
 	    int status = pdb_multi_occupancy(&dummy, &buffer, &current, occurule);
 	    if(status == 1){
@@ -536,13 +536,13 @@ static int guess_size_cif(FILE* fp, char* line, enum polymer_type polytype){
       }
       return max_size;
 }
-static atom_t parse_cif_line_to_atom(char* line, struct cif_attrloc* attrloc){
+static struct atom parse_cif_line_to_atom(char* line, struct cif_attrloc* attrloc){
       int indx = 0;
       char tokary[32][32];
       char sep[10] = "\t \"\n";
       char* token;
       token = strtok(line, sep);
-      atom_t atom;
+      struct atom atom;
 
 
       while(token != NULL){
@@ -573,7 +573,7 @@ static atom_t parse_cif_line_to_atom(char* line, struct cif_attrloc* attrloc){
       return atom;
 
 }
-void scancif(const char* ciffile, int (*pf)(char*), const char* chain, const char* modelno, atom_t** atomary, int* size, enum polymer_type polytype, char* label_or_auth, char occurule){
+void scancif(const char* ciffile, int (*pf)(char*), const char* chain, const char* modelno, struct atom** atomary, int* size, enum polymer_type polytype, char* label_or_auth, char occurule){
 
       FILE	*fp;										/* input-file pointer */
       fp	= fopen( ciffile, "r" );
@@ -603,18 +603,18 @@ void scancif(const char* ciffile, int (*pf)(char*), const char* chain, const cha
       int atmindx = 0;
 
 
-      atom_t atom;
-      atom_t* atomarr= NULL;
+      struct atom atom;
+      struct atom* atomarr= NULL;
       fprintf(stdout, "line=%s\n", line);
-      atom_t buffer = parse_cif_line_to_atom(line, &attribloc);
+      struct atom buffer = parse_cif_line_to_atom(line, &attribloc);
       while(!  ((modelno == NULL || buffer.model == model) && ((chain == NULL)||(strcmp(chain, buffer.chain) == 0)) && pf(buffer.resname) == 1)){
 	    if(fgets(line, 1024, fp) == NULL || line[0] == '#' ){
 		  goto final;
 	    }
 	    buffer = parse_cif_line_to_atom(line, &attribloc);
       }
-      atom_t current;
-      atomarr = (atom_t*) malloc (max_size * sizeof(atom_t));
+      struct atom current;
+      atomarr = (struct atom*) malloc (max_size * sizeof(struct atom));
       while(fgets(line, 1024, fp) != NULL && line[0] != '#'){
 	    if(strncmp(line, "ATOM", 4) != 0 && strncmp(line, "HETATM", 6) != 0) continue;
 	    atom = parse_cif_line_to_atom(line, &attribloc);
@@ -627,7 +627,7 @@ void scancif(const char* ciffile, int (*pf)(char*), const char* chain, const cha
 	    }
       }
       if((pf(buffer.resname) == 1) && ((chain == NULL) || (strcmp(chain,buffer.chain)== 0))){
-	    atom_t dummy;
+	    struct atom dummy;
 	    dummy.occu = ' ';
 	    int status = pdb_multi_occupancy(&dummy, &buffer, &current, occurule);
 	    if(status == 1){
@@ -669,7 +669,7 @@ void fname_join(char *filename, const char *path, const char *basename, const ch
       strcat(filename, basename);
       strcat(filename, ext);
 }
-//void scancif1(const char* ciffile, int (*pf)(char*), const char* chain, const char* modelno, atom_t** atomary, int* size, enum polymer_type polytype){
+//void scancif1(const char* ciffile, int (*pf)(char*), const char* chain, const char* modelno, struct atom** atomary, int* size, enum polymer_type polytype){
 //
 //      FILE* fp = fopen(ciffile, "r");
 //      if(fp == NULL){    /* Exception Handling */ 
@@ -697,7 +697,7 @@ void fname_join(char *filename, const char *path, const char *basename, const ch
 //      int max_size = guess_size_cif(fp, polytype);
 //      int atomindex = 0;
 //
-//      atom_t* atomarr = (atom_t*) malloc (max_size * sizeof(atom_t));
+//      struct atom* atomarr = (struct atom*) malloc (max_size * sizeof(struct atom));
 ////      while(fgets(line, 1024, fp) != NULL){
 ////	    if(strncmp(line, "_atom_site.", 11) != 0 && count == -1) continue;
 ////	    if(strncmp(line, "_atom_site.", 11) != 0 && count != -1) break;
@@ -737,9 +737,9 @@ void fname_join(char *filename, const char *path, const char *basename, const ch
 //////	    }
 //////
 ////      }
-//      atom_t atom;
-//      atom_t buffer = parse_cif_line_to_atom(line, attrloc);
-//      atom_t current;
+//      struct atom atom;
+//      struct atom buffer = parse_cif_line_to_atom(line, attrloc);
+//      struct atom current;
 //      while(line[0] != '#'){
 //	    int indx=0;
 //	    token = strtok(line, sep);
@@ -767,7 +767,7 @@ void fname_join(char *filename, const char *path, const char *basename, const ch
 //		  strcpy(prevchain, chn);
 //	    }
 //
-//	    atom_t atom;
+//	    struct atom atom;
 //	    char atomhetatom[20];
 //	    strcpy(atomhetatom, tokary[grouploc]);
 //
@@ -791,7 +791,7 @@ void fname_join(char *filename, const char *path, const char *basename, const ch
 //	    atom.bfact = atof(tokary[bfactloc]);
 //	    if(atomindex == max_arr_size){
 //		  max_arr_size *= 2;
-//		  atomarr = (atom_t*) realloc(atomarr, max_arr_size * sizeof(atom_t));
+//		  atomarr = (struct atom*) realloc(atomarr, max_arr_size * sizeof(struct atom));
 //	    }
 //	    atomarr[atomindex] = atom;
 //	    atomindex ++;

@@ -39,11 +39,11 @@
  */
 
 void scanpdb(const char* pdbfile, int (*pf)(char*), const char* chain, 
-	    const char* modelno, atom_t** atomary, int* size, enum polymer_type polytype, char occurule);
+	    const char* modelno, struct atom** atomary, int* size, enum polymer_type polytype, char occurule);
 
 
 
-void print_pdb_line(FILE* fp, const atom_t* atom);
+void print_pdb_line(FILE* fp, const struct atom* atom);
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  scancif
@@ -51,9 +51,9 @@ void print_pdb_line(FILE* fp, const atom_t* atom);
  * =====================================================================================
  */
 
-void scancif(const char* ciffile, int (*pf)(char*), const char* chain, const char* modelno, atom_t** atomary, int* size, enum polymer_type polytype, char* label_or_auth, char occurule);
+void scancif(const char* ciffile, int (*pf)(char*), const char* chain, const char* modelno, struct atom** atomary, int* size, enum polymer_type polytype, char* label_or_auth, char occurule);
 
-void printpdb(char* file_name, atom_t* atom_array, int size);
+void printpdb(char* file_name, struct atom* atom_array, int size);
 void fname_split(char *path, char *basename, char *ext, char *filename) ;
 
 void fname_join(char *filename, const char *path, const char *basename, const char *ext) ;
