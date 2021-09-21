@@ -105,11 +105,12 @@ int main ( int argc, char *argv[] )
 		  fprintf(stderr, "Error in function %s()... Unrecognized file type supplied.\n", __func__);
 		  exit(EXIT_FAILURE);
 	    }
-	    struct polymer polymer;
-	    polymer_create(&polymer, atoms, numatoms);
-	    struct residue res = residue_at(&polymer, 0);
-	    cys_addh(&res);
-	    printpdb("abc.pdb", atoms, numatoms);
+	    exec_hbfind(atoms, numatoms);
+//	    struct polymer polymer;
+//	    polymer_create(&polymer, atoms, numatoms);
+//	    struct residue res = residue_at(&polymer, 0);
+//	    cys_addh(&res);
+//	    printpdb("abc.pdb", atoms, numatoms);
       }
       return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */

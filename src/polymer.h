@@ -21,24 +21,24 @@
 
 #include "biodefs.h"
 
-struct polymer{
-      struct atom* atoms;
-      int numatom;
-      int* residue;
-      int numres;
-};
-
 struct residue{
       struct atom* atoms;
       int size;
       char name[4];
 };
 
-struct residue residue_at(struct polymer*, int resindex);
-void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom);
-struct atom* polymer_resbeg(struct polymer* poly, int resindex);
 
-struct atom* polymer_resend(struct polymer* poly, int resindex);
+struct polymer{
+      struct atom* atoms;
+      int numatom;
+      struct residue* residues;
+      int numres;
+};
+
+
+void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom);
+void polymer_free(struct polymer* polymer);
+struct residue* residue_at(struct polymer*, int resindex);
 int polymer_ressize(struct polymer* poly, int resindex);
  
 

@@ -75,28 +75,39 @@ void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom){
 
       polymer->atoms = atoms;
       polymer->numatom = numatom;
-      partition_into_residues(atoms, numatom, (numatom/5), &polymer->residue, &polymer->numres);
+      int* res_partition;
+      int numres;
+
+      partition_into_residues(atoms, numatom, (numatom/5), &res_partition, &numres);
+      polymer->numres = numres;
+      polymer->residues = (struct residue*) malloc (numres * sizeof(struct residue));
+      int atmpos;
+      int ressize;
+      for(int i=0; i<numres; ++i){
+	    atmpos = res_partition[i];
+	    ressize= res_partition[i+1] - atmpos;
+
+
+	    polymer->residues[i].atoms = polymer->atoms + atmpos;
+	    polymer->residues[i].size  = ressize;
+	    strcpy(polymer->residues[i].name, polymer->residues[i].atoms[0].resname);
+      }
+      free(res_partition);
+      res_partition = NULL;
 }
-
-struct atom* polymer_resbeg(struct polymer* poly, int resindex)
-{
-      return &poly->atoms[poly->residue[resindex]];
-} 
-
-struct atom* polymer_resend(struct polymer* poly, int resindex)
-{
-      return &poly->atoms[poly->residue[resindex + 1] - 1];
-} 
 
 int polymer_ressize(struct polymer* poly, int resindex)
 {
-      return (poly->residue[resindex + 1] - poly->residue[resindex]);
+      return poly->residues[resindex].size;
 } 
 
-struct residue residue_at(struct polymer* poly, int resindex){
-      struct residue res;
-      res.atoms = polymer_resbeg(poly, resindex);
-      res.size  = polymer_ressize(poly, resindex);
-      strcpy(res.name, res.atoms->resname);
-      return res;
+struct residue* residue_at(struct polymer* poly, int resindex){
+      return poly->residues + resindex;
+}
+
+
+void polymer_free(struct polymer* polymer)
+{
+      free(polymer->residues);
+      polymer->residues = NULL;
 }

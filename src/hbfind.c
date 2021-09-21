@@ -20,6 +20,8 @@
 
 #include "bioio.h"
 
+
+
 static Point3d find_location(Vector3d axis, Vector3d ref_normal, Point3d reference_point, double bond_len, double bond_angle, double torsion_angle){
       Vector3d bang_add = vec3d_polar_rotation(ref_normal, axis, PI - bond_angle);
       Vector3d tors_add = vec3d_polar_rotation(axis, bang_add, torsion_angle);
