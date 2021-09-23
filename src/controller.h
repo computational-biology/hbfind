@@ -1,4 +1,4 @@
-/*
+		/*
  * =====================================================================================
  *
  *       Filename:  controller.h
@@ -28,15 +28,17 @@
 #include "polymer.h"
 #include "kdtree.h"
 #include "hbutil.h"
-#define MAX_NN_RES (10)
+#define MAX_NN_RES (20)
 struct site{
       struct residue* src;
       char name[5];
       char type;
       struct residue* nnres[MAX_NN_RES];
       int numnn;
+      int maxnn;
 };
 
+void site_init(struct site* site);
 void site_setsrc(struct site* site, struct residue* src);
 
 void site_fill_neighbor(struct site* site, struct kdtree* tree, double incldist);

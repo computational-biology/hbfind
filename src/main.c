@@ -23,6 +23,7 @@
 #include "bioio.h"
 #include "polymer.h"
 #include "hbfind.h"
+#include "controller.h"
 
 
 

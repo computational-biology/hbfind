@@ -21,6 +21,7 @@
 #define  __hbfind_H__
 
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,6 +29,7 @@
 #include "biodefs.h"
 #include "polymer.h"
  
+
 
 void cys_addh(struct residue* res);
 

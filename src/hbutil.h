@@ -21,9 +21,9 @@
 #include "biodefs.h"
 #include "polymer.h"
 /* These functions are for kd-tree*/
-double res_distsqr(void* residue1, void* residue2);
-int res_comp(void* residue1, void* residue2, int index);
-double res_value_at(void* residue, int index);
+double res_distsqr(struct residue* residue1, struct residue* residue2);
+int res_comp(struct residue* residue1, struct residue* residue2, int index);
+double res_value_at(struct residue* residue, int index);
 
 
 #endif   /* ----- #ifndef __hbutil_H__  ----- */

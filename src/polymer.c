@@ -78,6 +78,7 @@ void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom){
       int* res_partition;
       int numres;
 
+      
       partition_into_residues(atoms, numatom, (numatom/5), &res_partition, &numres);
       polymer->numres = numres;
       polymer->residues = (struct residue*) malloc (numres * sizeof(struct residue));
@@ -89,6 +90,7 @@ void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom){
 
 
 	    polymer->residues[i].atoms = polymer->atoms + atmpos;
+//	    print_pdb_line(stdout, polymer->residues[i].atoms);
 	    polymer->residues[i].size  = ressize;
 	    strcpy(polymer->residues[i].name, polymer->residues[i].atoms[0].resname);
       }

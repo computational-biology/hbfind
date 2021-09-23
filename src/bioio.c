@@ -361,7 +361,7 @@ void scanpdb(const char* pdbfile, int (*pf)(char*), const char* chain,
 	    if(  (pf(atom.resname) == 1)     &&    ((chain == NULL) || (strcmp(chain,atom.chain) == 0))){
 		  int status = pdb_multi_occupancy(&atom, &buffer, &current, occurule);
 		  if(status == 1){
-			print_pdb_line(stdout, &current);
+			//print_pdb_line(stdout, &current);
 			insert_atom(&atomarr, &atmindx, &max_size, current);
 		  }
 	    }
@@ -372,7 +372,7 @@ void scanpdb(const char* pdbfile, int (*pf)(char*), const char* chain,
 	    dummy.occu = ' ';
 	    int status = pdb_multi_occupancy(&dummy, &buffer, &current, occurule);
 	    if(status == 1){
-		  print_pdb_line(stdout, &current);
+		  //print_pdb_line(stdout, &current);
 		  insert_atom(&atomarr, &atmindx, &max_size, current);
 	    }
       }

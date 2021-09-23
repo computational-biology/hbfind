@@ -19,7 +19,8 @@
 
 #include "biodefs.h"
 #include "polymer.h"
-double res_distsqr(void* residue1, void* residue2)
+#include "bioio.h"
+double res_distsqr(struct residue* residue1, struct residue* residue2)
 {
       struct residue* res1 = (struct residue*) residue1;
       struct residue* res2 = (struct residue*) residue2;
@@ -28,8 +29,10 @@ double res_distsqr(void* residue1, void* residue2)
 
 }
 
-int res_comp(void* residue1, void* residue2, int index)
+int res_comp(struct residue* residue1, struct residue* residue2, int index)
 {
+      
+      
       struct residue* res1 = (struct residue*) residue1;
       struct residue* res2 = (struct residue*) residue2;
 
@@ -52,7 +55,7 @@ int res_comp(void* residue1, void* residue2, int index)
       exit(EXIT_FAILURE);
       return -999;
 }
-double res_value_at(void* residue, int index)
+double res_value_at(struct residue* residue, int index)
 {
 
       struct residue* res = (struct residue*) residue;

@@ -19,6 +19,11 @@
 #include "controller.h"
 
 
+void site_init(struct site* site)
+{
+      site->src = NULL;
+      site->maxnn = MAX_NN_RES;
+}
 void site_setsrc(struct site* site, struct residue* src)
 {
       site->src = src;
@@ -27,25 +32,41 @@ void site_setsrc(struct site* site, struct residue* src)
 
 void site_fill_neighbor(struct site* site, struct kdtree* tree, double incldist)
 {
-      kdtree_neighbors((void*)&site->nnres, &site->numnn, tree, site->src, incldist *incldist);
+      kdtree_neighbors(site->nnres, &site->numnn, site->maxnn, tree, site->src, incldist *incldist);
 }
 
 void exec_hbfind(struct atom* atoms, int numatom)
 {
       struct polymer poly;
+      
+      
       polymer_create(&poly, atoms, numatom);
+
+      
       struct kdtree kdtree;
-      kdtree_init(&kdtree, poly.residues, sizeof(struct residue*), poly.numres, res_comp, res_value_at, res_distsqr);
+      printf("numres = %d\n", poly.numres);
+      kdtree_init(&kdtree, poly.residues, poly.numres);
+
+      
       kdtree_build(&kdtree);
 
       struct site site;
+      site_init(&site);
+      printf("Trace %d\n", poly.numres);
       for(int i=0; i<poly.numres; ++i){
 	    site_setsrc(&site, poly.residues+i);
-	    site_fill_neighbor(&site, &kdtree, 20.0);
+	    printf("------src %d -- of-- %d\n", i, poly.numres);
+	    printf("src = \n");
+	    print_pdb_line(stdout, site.src->atoms);
+	    site_fill_neighbor(&site, &kdtree, 1236.5);
+
+	    
+	    printf("nbh = \n");
 	    for(int j=0; j<site.numnn; ++j){
-		  print_pdb_line(stdout, site.nnres[i]->atoms + 0);
+		  struct residue* res = site.nnres[j];
+		  print_pdb_line(stdout,res->atoms);
 	    }
-	    exit(1);
+	    printf("end ---------\n");
       }
 
 }
