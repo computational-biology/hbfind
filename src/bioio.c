@@ -86,7 +86,7 @@ void print_pdb_line(FILE* fp, const struct atom* atom){
       }
 
 
-      fprintf(stdout, "%-6s%5d %4s%c%3s%2s%4d%c   %8.3lf%8.3lf%8.3lf%6.2lf%6.2lf          %2s\n", 
+      fprintf(fp, "%-6s%5d %4s%c%3s%2s%4d%c   %8.3lf%8.3lf%8.3lf%6.2lf%6.2lf          %2s\n", 
 		  tag, atom->id, iupacloc, atom->altloc,
 		  atom->resname, atom->chain, atom->resid, ins, 
 		  atom->center.x, atom->center.y, atom->center.z,
@@ -655,13 +655,14 @@ void fname_split(char *path, char *basename, char *ext, char *filename) {
 
       if(sep == NULL){
 	    path[0] ='\0' ;
-	    strncpy(basename, filename, (size_t)(ext - filename));
-	    basename[(size_t)(ext - filename)] = '\0';
+
+	    strncpy(basename, filename, (size_t)(extn - filename));
+	    basename[(size_t)(extn - filename)] = '\0';
       }else{
 	    strncpy(path, filename, (size_t)(sep - filename)+1);
 	    path[(size_t)(sep - filename) + 1] = '\0';
-	    strncpy(basename, sep + 1, (size_t)(ext-sep) - 1);
-	    basename[(size_t)(ext - sep) - 1] = '\0';
+	    strncpy(basename, sep + 1, (size_t)(extn-sep) - 1);
+	    basename[(size_t)(extn - sep) - 1] = '\0';
       }
 }
 void fname_join(char *filename, const char *path, const char *basename, const char *ext) {

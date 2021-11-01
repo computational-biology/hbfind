@@ -71,6 +71,29 @@ static void partition_into_residues(const struct atom* atom_array, const int num
       *partition_array = partition;
       *num_residues = index-1;
 }
+void residue_printpdb(FILE* fp, struct residue* res)
+{
+    for(int i=0; i<res->size; ++i){
+        print_pdb_line(fp, res->atoms +i);
+    }
+    for(int i=0; i<res->numh; ++i){
+        print_pdb_line(fp, res->H +i);
+    }
+}
+void residue_addh(struct residue* res, Point3d position, char* h_name)
+{
+      if(res->numh == MAX_HYDRO){    /* Exception Handling */ 
+	    fprintf(stderr, "Error in function %s()... hydrogen max limit encountered.\n", __func__);
+	    exit(EXIT_FAILURE);
+      }
+      res->H[res->numh] = res->atoms[0];
+
+      res->H[res->numh].center = position;
+      strcpy(res->H[res->numh].loc, h_name);
+      strcpy(res->H[res->numh].symbol, "H");
+      res->H[res->numh].id = 0;
+      res->numh = res->numh + 1;
+}
 void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom){
 
       polymer->atoms = atoms;
@@ -93,6 +116,7 @@ void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom){
 //	    print_pdb_line(stdout, polymer->residues[i].atoms);
 	    polymer->residues[i].size  = ressize;
 	    strcpy(polymer->residues[i].name, polymer->residues[i].atoms[0].resname);
+	    polymer->residues[i].numh = 0;
       }
       free(res_partition);
       res_partition = NULL;
@@ -105,6 +129,13 @@ int polymer_ressize(struct polymer* poly, int resindex)
 
 struct residue* residue_at(struct polymer* poly, int resindex){
       return poly->residues + resindex;
+}
+
+void polymer_printpdb(FILE* fp, struct polymer* poly)
+{
+    for(int i=0; i<poly->numres; ++i){
+        residue_printpdb(fp, poly->residues + i);
+    }
 }
 
 

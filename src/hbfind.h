@@ -28,9 +28,8 @@
 
 #include "biodefs.h"
 #include "polymer.h"
+
  
-
-
 void cys_addh(struct residue* res);
 
 #endif   /* ----- #ifndef __hbfind_H__  ----- */

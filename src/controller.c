@@ -35,14 +35,17 @@ void site_fill_neighbor(struct site* site, struct kdtree* tree, double incldist)
       kdtree_neighbors(site->nnres, &site->numnn, site->maxnn, tree, site->src, incldist *incldist);
 }
 
-void exec_hbfind(struct atom* atoms, int numatom)
+void exec_hbfind(struct polymer* poly)
 {
-      struct polymer poly;
-      
-      
-      polymer_create(&poly, atoms, numatom);
+     
+           
+      for(int i=0; i<poly->numres; ++i){
+          if(strcmp(poly->residues[i].name, "CYS") == 0){
+              cys_addh(poly->residues + i);
+          }
+      }
 
-      
+ /*     
       struct kdtree kdtree;
       printf("numres = %d\n", poly.numres);
       kdtree_init(&kdtree, poly.residues, poly.numres);
@@ -68,6 +71,7 @@ void exec_hbfind(struct atom* atoms, int numatom)
 	    }
 	    printf("end ---------\n");
       }
+      */
 
 }
 

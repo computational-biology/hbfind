@@ -96,8 +96,8 @@ int main ( int argc, char *argv[] )
 	    strcpy(args.file.full_name, argv[file_index[i]]);
 
 	    
-//	    fname_split(args.file.path, args.file.basename, args.file.ext, args.file.full_name);
-	    strcpy(args.file.ext, ".pdb");
+	    fname_split(args.file.path, args.file.basename, args.file.ext, args.file.full_name);
+	    //strcpy(args.file.ext, ".pdb");
 	    if(strcmp(args.file.ext, ".cif") == 0){
 		  scancif(args.file.full_name, all_residues, NULL, NULL, &atoms, &numatoms, ALL_TYPE, "label", args.bio.occu);
 	    }else if(strcmp(args.file.ext, ".pdb") ==0 ){
@@ -106,12 +106,35 @@ int main ( int argc, char *argv[] )
 		  fprintf(stderr, "Error in function %s()... Unrecognized file type supplied.\n", __func__);
 		  exit(EXIT_FAILURE);
 	    }
-	    exec_hbfind(atoms, numatoms);
-//	    struct polymer polymer;
-//	    polymer_create(&polymer, atoms, numatoms);
-//	    struct residue res = residue_at(&polymer, 0);
-//	    cys_addh(&res);
-//	    printpdb("abc.pdb", atoms, numatoms);
+	    
+	    struct polymer polymer;
+	    polymer_create(&polymer, atoms, numatoms);
+	    exec_hbfind(&polymer);
+	    FILE *outfp;										/* output-file pointer */
+	    char outfp_file_name[512];		/* output-file name    */
+	    fname_join(outfp_file_name, args.file.path, args.file.basename, "_h.pdb"); 
+	    
+
+	    
+
+	    outfp = fopen( outfp_file_name, "w" );
+	    if ( outfp == NULL ) {
+		  fprintf ( stderr, "couldn't open file '%s'; %s\n",
+			      outfp_file_name, strerror(errno) );
+		  exit (EXIT_FAILURE);
+	    }
+	    polymer_printpdb(outfp, &polymer);
+	    
+	    if( fclose(outfp) == EOF ) {			/* close output file   */
+		  fprintf ( stderr, "couldn't close file '%s'; %s\n",
+			      outfp_file_name, strerror(errno) );
+		  exit (EXIT_FAILURE);
+	    }
+
+	    polymer_free(&polymer);
+	    free(atoms);
+	    atoms = NULL;
+	    
       }
       return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */

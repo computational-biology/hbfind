@@ -37,23 +37,24 @@ static Point3d fix_atom(Point3d pcur1, Point3d pcur2, Point3d pcur3, double bond
       return hloc;
 }
 
-static void update_atom(struct atom* atom, int atomid, char* loc_name, char* symb, Point3d* point){
-      atom->id = atomid;
-      strcpy(atom->loc, loc_name);
-      strcpy(atom->symbol, symb);
-      atom->center = *point;
-}
+//static void update_atom(struct atom* atom, int atomid, char* loc_name, char* symb, Point3d* point){
+//      atom->id = atomid;
+//      strcpy(atom->loc, loc_name);
+//      strcpy(atom->symbol, symb);
+//      atom->center = *point;
+//}
+
 
 
 void cys_addh(struct residue* res)
 {
+      printf("Trace... cys exec\n");
       Point3d N ;
       Point3d CA;
       Point3d CB;
       Point3d SG;
       int count = 0;
       for(int i=0; i<res->size; ++i){
-	    print_pdb_line(stdout, res->atoms+i);
 	    if(strcmp(res->atoms[i].loc, "N") == 0){
 		  N = res->atoms[i].center;
 		  count++;
@@ -78,18 +79,13 @@ void cys_addh(struct residue* res)
       double hbangle = torad(106.97);
       double hbdist  = 0.97;
       Point3d HB1 = fix_atom(N, CA, CB, hbdist, hbangle, tors_ang + adjust );
+      residue_addh(res, HB1, "HB1");
       Point3d HB2 = fix_atom(N, CA, CB, hbdist, hbangle, tors_ang - adjust );
-      Point3d HG  = fix_atom(CA, CB, SG, 1.20, torad(109.0), torad(180.0));
-      Point3d HA  = fix_atom(SG, CB, CA, 0.97, torad(105.0), torad(174.0));
-      struct atom newatom = res->atoms[0];
-      update_atom(&newatom, 0, "HB1", "H", &HB1);
-      printf("--from here--\n");
-      print_pdb_line(stdout, &newatom);
-      update_atom(&newatom, 0, "HB2", "H", &HB2);
-      print_pdb_line(stdout, &newatom);
-      update_atom(&newatom, 0, "HG", "H", &HG);
-      print_pdb_line(stdout, &newatom);
-      update_atom(&newatom, 0, "HA", "H", &HA);
-      print_pdb_line(stdout, &newatom);
+      residue_addh(res, HB2, "HB2");
+      Point3d HG  = fix_atom(CA, CB, SG, 1.20, torad(90.0), torad(180.0));
+
+      residue_addh(res, HG, "HG");
+      Point3d HA  = fix_atom(SG, CB, CA, 0.97, torad(90.0), tors_ang+adjust);
+      residue_addh(res, HA, "HA");
 }
 
