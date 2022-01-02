@@ -21,17 +21,18 @@
 
 #include "biodefs.h"
 #include "bioio.h"
-#define MAX_HYDRO (10)
+#define MAX_HYDRO (15)
 struct residue{
       struct atom* atoms;
       int size;
       char name[4];
       struct atom H[MAX_HYDRO];
+      int precursor_index[MAX_HYDRO];
       int numh;
 };
 
 
-void residue_addh(struct residue* res, Point3d position, char* h_name);
+void residue_addh(struct residue* res, int precur_indx, Point3d position, char* h_name);
 void residue_printpdb(FILE* fp, struct residue* res);
 
 
