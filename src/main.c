@@ -10,8 +10,23 @@
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  PARTHAJIT ROY (PR), roy.parthajit@gmail.com
- *   Organization:  The University of Burdwan
+ *        Authors:  PARTHAJIT ROY (PR), Dept. of Comp. Science, The University of Burdwan, 
+ *                  e-mail-     roy.parthajit@gmail.com
+ *
+ *                  DHANANJAY BHATTACHARYYA, Saha Institute of Nuclear Physics,
+ *                  e-mail: dhananjay.bhattacharyya@saha.ac.in
+ *
+ *                  ANWESHA DUTTA, Masters Student, Dept of Computer Science, The University of Burdwan, 
+ *                  e-mail- anweshadatta808@gmail.com
+ *           
+ *     COPYRIGHT: 2022, ! Copyright 2022 AUTHORS.
+ *                Licensed under the Apache License, Version 2.0 (the "License");
+ *                you may not use this file except in compliance with the License.
+ *                You may obtain a copy of the License at              
+ *                http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *
+ * git repository:  The University of Burdwan
  *
  * =====================================================================================
  */
