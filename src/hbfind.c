@@ -2382,7 +2382,7 @@ void gua_addh(struct residue *res)
       residue_addh(res, C8ii, H8, "H8");
 
       tors_ang = torsion_angle(C5, C6, N1, C2);
-      Point3d H1 = fix_atom(C5, C6, N1, 0.86, -hbangle, tors_ang);
+      Point3d H1 = fix_atom(C5, C6, N1, 0.86, torad(-120.0), tors_ang);
       residue_addh(res, N1ii, H1, "H1");
 
       Point3d H2_1 = fix_atom(N1, C2, N2, 0.86, torad(120.0), 0.0);
