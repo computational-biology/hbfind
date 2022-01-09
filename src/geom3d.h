@@ -11,6 +11,8 @@
 
 #define PI (3.1415926)
 
+#define UNDEFINED_VAL (-99999998.0)
+
 double torad(double deg);
 
 
@@ -21,6 +23,8 @@ typedef struct{
       double y;
       double z;
 }Point3d;
+
+void point3d_init(Point3d* dst);
 
 typedef Point3d Vector3d;
 

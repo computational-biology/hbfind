@@ -16,6 +16,11 @@ double todeg(double rad)
 
 }
 
+void point3d_init(Point3d* dst)
+{
+      dst->x = -UNDEFINED_VAL-1.0;
+}
+
 
 Vector3d vec3d_cross(Vector3d u, Vector3d v) {
       Vector3d result;
