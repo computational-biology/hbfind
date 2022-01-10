@@ -24,7 +24,8 @@ typedef struct{
       double z;
 }Point3d;
 
-void point3d_init(Point3d* dst);
+void point3d_uninitialize(Point3d* point);
+int  Point3d_is_uninit(Point3d* point);
 
 typedef Point3d Vector3d;
 

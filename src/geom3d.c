@@ -4,6 +4,9 @@
 
 #include "geom3d.h"
 
+#define TRUE (1)
+#define FALSE (0)
+
 double torad(double deg)
 {
     return ((PI * deg) / (double)180.0);
@@ -16,11 +19,15 @@ double todeg(double rad)
 
 }
 
-void point3d_init(Point3d* dst)
+void point3d_uninitialize(Point3d* point)
 {
-      dst->x = -UNDEFINED_VAL-1.0;
+      point->x = -UNDEFINED_VAL-1.0;
 }
 
+int  Point3d_is_uninit(Point3d* point){
+     if(point->x < UNDEFINED_VAL) return TRUE;
+     else return FALSE;
+}
 
 Vector3d vec3d_cross(Vector3d u, Vector3d v) {
       Vector3d result;
@@ -166,6 +173,14 @@ double dihedral_angle(Plane p1, Plane p2){
       return acos(N);
 }
 double torsion_angle(Point3d a, Point3d b, Point3d c, Point3d d){
+      
+      if(   Point3d_is_uninit(&a) == TRUE || 
+      		Point3d_is_uninit(&b) == TRUE ||
+      		Point3d_is_uninit(&c) == TRUE ||
+      		Point3d_is_uninit(&d) == TRUE ){
+            return UNDEFINED_VAL - 1.0;
+      }
+      
       Vector3d bc = vec3d_create(c.x - b.x, c.y - b.y, c.z - b.z);
 
       Plane p1 = plane_create(a, b, c);

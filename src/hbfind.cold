@@ -12,7 +12,7 @@
  *
  *         Author:  PARTHAJIT ROY (PR), roy.parthajit@gmail.com
  *                  ANWESHA DUTTA, Masters Student, Dept of Computer Science,
- *                  e-mail: anweshadatta808@gmail.com 
+ *                  e-mail- 	anweshadatta808@gmail.com 
  *   Organization:  The University of Burdwan
  *
  * =====================================================================================
@@ -32,15 +32,6 @@ static Point3d find_location(Vector3d axis, Vector3d ref_normal, Point3d referen
 
 static Point3d fix_atom(Point3d pcur1, Point3d pcur2, Point3d pcur3, double bond_len, double bond_angle, double torsion_angle)
 {
-      if(torsion_angle < UNDEFINED_VAL + 1.0 || 
-		  Point3d_is_uninit(&pcur1) == TRUE ||
-		  Point3d_is_uninit(&pcur2) == TRUE ||
-		  Point3d_is_uninit(&pcur3) == TRUE
-		  ){
-	    Point3d point;
-	    point3d_uninitialize(&point);
-	    return point;
-      }
       Plane pcur_plane = plane_create(pcur1, pcur2, pcur3);
       Vector3d pcur_unit_vector = vec3d_unit(vec3d_sub(pcur3, pcur2));
       Point3d hloc = find_location(pcur_unit_vector, pcur_plane.unit_normal, pcur3, bond_len, bond_angle, torsion_angle);
@@ -62,10 +53,10 @@ void cys_addh(struct residue *res)
       Point3d CA;
       Point3d CB;
       Point3d SG;
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&SG);
+      point3d_init(&N);
+      point3d_init(&CA);
+      point3d_init(&CB);
+      point3d_init(&SG);
       int Nii =-1;
       int CAii=-1;
       int CBii=-1;
@@ -105,7 +96,7 @@ void cys_addh(struct residue *res)
       if (count != 4)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double adjust = torad(120.0);
       double hbangle = torad(106.97);
@@ -132,11 +123,6 @@ void ala_addh(struct residue *res)
       Point3d CB;
       Point3d C;
       Point3d O;
-      point3d_uninitialize(& N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&O);
       int Nii =-1;
       int CAii=-1;
       int CBii=-1;
@@ -184,7 +170,7 @@ void ala_addh(struct residue *res)
       if (count != 5)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double adjust = torad(120.0);
       double hbangle = torad(106.97);
@@ -213,10 +199,6 @@ void asp_addh(struct residue *res)
       Point3d CA;
       Point3d CB;
       Point3d CG;
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
       int Nii  = -1;
       int CAii = -1;
       int CBii = -1;
@@ -256,7 +238,7 @@ void asp_addh(struct residue *res)
       if (count != 4)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(N, CA, CB, CG);
 
@@ -284,12 +266,6 @@ void glu_addh(struct residue *res)
       Point3d CD;
       Point3d N;
       Point3d C;
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&CD);
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&C);
       int CAii = -1;
       int CBii = -1;
       int CGii = -1;
@@ -348,7 +324,7 @@ void glu_addh(struct residue *res)
       if (count != 6)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(CA, CB, CG, CD);
 
@@ -375,6 +351,7 @@ void glu_addh(struct residue *res)
 void phe_addh(struct residue* res)
 {
       Point3d C;
+      //  Point3d O;
       Point3d N;
       Point3d CA;
       Point3d CB;
@@ -384,16 +361,6 @@ void phe_addh(struct residue* res)
       Point3d CE1;
       Point3d CE2;
       Point3d CZ;
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&CD1);
-      point3d_uninitialize(&CD2);
-      point3d_uninitialize(&CE1);
-      point3d_uninitialize(&CE2);
-      point3d_uninitialize(&CZ);
 
       int  Cii  = -1;
       int  Nii  = -1;
@@ -469,7 +436,7 @@ void phe_addh(struct residue* res)
       }
       if( count != 10){    /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(C ,CA, CB, CG);
 
@@ -511,10 +478,6 @@ void gly_addh(struct residue *res)
       Point3d C;
       Point3d CA;
       Point3d N;
-      point3d_uninitialize(&O);
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&N);
 
       int Oii  = -1;
       int Cii  = -1;
@@ -556,7 +519,7 @@ void gly_addh(struct residue *res)
       if (count != 4)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(O, C, CA, N);
 
@@ -583,17 +546,6 @@ void his_addh(struct residue* res)
       Point3d CE1;
       Point3d NE2;
       Point3d CD2;
-
-      point3d_uninitialize(&O);
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&ND1);
-      point3d_uninitialize(&CE1);
-      point3d_uninitialize(&NE2);
-      point3d_uninitialize(&CD2);
 
       int  Oii  = -1;
       int  Cii  = -1;
@@ -671,7 +623,7 @@ void his_addh(struct residue* res)
       }
       if( count != 10 ){ /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(CG, CB, CA, C);
 
@@ -707,13 +659,6 @@ void ile_addh(struct residue *res)
       Point3d CG1;
       Point3d CG2;
       Point3d CD1;
-
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG1);
-      point3d_uninitialize(&CG2);
-      point3d_uninitialize(&CD1);
 
       int  Nii  = -1;
       int CAii  = -1;
@@ -771,7 +716,7 @@ void ile_addh(struct residue *res)
       if (count != 6)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(CG2,CB,CA,N);
 
@@ -812,14 +757,6 @@ void asn_addh(struct residue *res)
       Point3d CG;
       Point3d C;
       Point3d ND2;
-
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&ND2);
-
       int  Nii  = -1;
       int CAii  = -1;
       int CBii  = -1;
@@ -876,7 +813,7 @@ void asn_addh(struct residue *res)
       if (count != 6)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(C, CA, CB, CG);
 
@@ -909,15 +846,6 @@ void lys_addh(struct residue *res)
       Point3d CD;
       Point3d CE;
       Point3d NZ;
-
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&CD);
-      point3d_uninitialize(&CE);
-      point3d_uninitialize(&NZ);
 
       int  Nii  = -1;
       int  Cii  = -1;
@@ -992,7 +920,7 @@ void lys_addh(struct residue *res)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
 	    return ;
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(C,CA, CB, CG);
 
@@ -1042,14 +970,6 @@ void leu_addh(struct residue *res)
       Point3d CA;
       Point3d CB;
       Point3d CG;
-
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CD2);
-      point3d_uninitialize(&CD1);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
 
       int  Cii  = -1;
       int  Nii  = -1;
@@ -1115,7 +1035,7 @@ void leu_addh(struct residue *res)
       if (count != 7)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(C, CA, CB, CG);
 
@@ -1157,14 +1077,6 @@ void met_addh(struct residue *res)
       Point3d CG;
       Point3d SD;
       Point3d CE;
-
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&SD);
-      point3d_uninitialize(&CE);
 
       int  Cii  = -1;
       int  Nii  = -1;
@@ -1230,7 +1142,7 @@ void met_addh(struct residue *res)
       if (count != 7)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(C, CA, CB, CG);
 
@@ -1266,12 +1178,6 @@ void pro_addh(struct residue *res)
       Point3d CB;
       Point3d CG;
       Point3d CD;
-
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&CD);
 
       int  Nii  = -1;
       int CAii  = -1;
@@ -1321,7 +1227,7 @@ void pro_addh(struct residue *res)
       if (count != 5)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(CB,CG,CD,N);
 
@@ -1354,15 +1260,6 @@ void gln_addh(struct residue *res)
       Point3d CG;
       Point3d CD;
       Point3d NE2;
-
-      point3d_uninitialize(&O);
-      point3d_uninitialize(&C);
-      point3d_uninitialize(&N);
-      point3d_uninitialize(&CA);
-      point3d_uninitialize(&CB);
-      point3d_uninitialize(&CG);
-      point3d_uninitialize(&CD);
-      point3d_uninitialize(&NE2);
 
       int  Oii  = -1;
       int  Cii  = -1;
@@ -1438,7 +1335,7 @@ void gln_addh(struct residue *res)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
 	    return ;
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle( CA, CB, CG,CD);
 
@@ -1477,17 +1374,6 @@ void arg_addh(struct residue *res)
       Point3d CZ;
       Point3d NH1;
       Point3d NH2;
-
-      point3d_uninitialize(&C);
-      point3d_uninitialize (&CA);
-      point3d_uninitialize (&N);
-      point3d_uninitialize (&CB);
-      point3d_uninitialize (&CG);
-      point3d_uninitialize (&CD);
-      point3d_uninitialize (&NE);
-      point3d_uninitialize (&CZ);
-      point3d_uninitialize (&NH1);
-      point3d_uninitialize (&NH2);
 
       int  Cii  = -1;
       int CAii  = -1;
@@ -1580,7 +1466,7 @@ void arg_addh(struct residue *res)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
 	    return ;
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(C, CA, CB, CG);
 
@@ -1629,12 +1515,6 @@ void ser_addh(struct residue *res)
       Point3d CB;
       Point3d OG;
 
-      point3d_uninitialize (&C);
-      point3d_uninitialize (&N);
-      point3d_uninitialize (&CA);
-      point3d_uninitialize (&CB);
-      point3d_uninitialize (&OG);
-
       int  Cii  = -1;
       int  Nii  = -1;
       int CAii  = -1;
@@ -1682,7 +1562,7 @@ void ser_addh(struct residue *res)
       if (count != 5)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(OG,CB,CA,C);
 
@@ -1707,12 +1587,6 @@ void thr_addh(struct residue *res)
       Point3d CA;
       Point3d CB;
       Point3d OG1;
-
-      point3d_uninitialize (&CG2);
-      point3d_uninitialize (&N);
-      point3d_uninitialize (&CA);
-      point3d_uninitialize (&CB);
-      point3d_uninitialize (&OG1);
 
       int CG2ii = -1;
       int  Nii  = -1;
@@ -1762,7 +1636,7 @@ void thr_addh(struct residue *res)
       if (count != 5)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(CG2,CB,CA,N);
 
@@ -1793,12 +1667,6 @@ void val_addh(struct residue *res)
       Point3d CA;
       Point3d CB;
       Point3d CG1;
-
-      point3d_uninitialize (&CG2);
-      point3d_uninitialize (&N);
-      point3d_uninitialize (&CA);
-      point3d_uninitialize (&CB);
-      point3d_uninitialize (&CG1);
 
       int CG2ii = -1;
       int  Nii  = -1;
@@ -1848,7 +1716,7 @@ void val_addh(struct residue *res)
       if (count != 5)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(CG2,CB,CA,N);
 
@@ -1891,19 +1759,6 @@ void trp_addh(struct residue *res)
       Point3d CH2;
       Point3d CE2;
       Point3d CZ2;
-
-      point3d_uninitialize (&C);
-      point3d_uninitialize (&CA);
-      point3d_uninitialize (&CB);
-      point3d_uninitialize (&CG);
-      point3d_uninitialize (&CD1);
-      point3d_uninitialize (&NE1);
-      point3d_uninitialize (&CD2);
-      point3d_uninitialize (&CE3);
-      point3d_uninitialize (&CZ3);
-      point3d_uninitialize (&CH2);
-      point3d_uninitialize (&CE2);
-      point3d_uninitialize (&CZ2);
 
       int  Cii  = -1;
       int CAii  = -1;
@@ -2010,7 +1865,7 @@ void trp_addh(struct residue *res)
       if (count != 12)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(C,CA,CB,CG);
 
@@ -2055,17 +1910,6 @@ void tyr_addh(struct residue *res)
       Point3d CB;
       Point3d CA;
       Point3d N;
-
-      point3d_uninitialize (&CZ);
-      point3d_uninitialize (&CE2);
-      point3d_uninitialize (&CD2);
-      point3d_uninitialize (&CG);
-      point3d_uninitialize (&CE1);
-      point3d_uninitialize (&CD1);
-      point3d_uninitialize (&OH);
-      point3d_uninitialize (&CB);
-      point3d_uninitialize (&CA);
-      point3d_uninitialize (&N);
 
       int  CZii  = -1;
       int CE2ii = -1;
@@ -2154,7 +1998,7 @@ void tyr_addh(struct residue *res)
       if (count != 10)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(CZ,CE2,CD2,CG);
 
@@ -2198,17 +2042,6 @@ void pentose_sugar_addh(struct residue* res){
       Point3d O5_P;
       Point3d O4_P;
       Point3d P;
-
-      point3d_uninitialize (&C1_P);
-      point3d_uninitialize (&C2_P);
-      point3d_uninitialize (&C3_P);
-      point3d_uninitialize (&O3_P);
-      point3d_uninitialize (&C4_P);
-      point3d_uninitialize (&C5_P);
-      point3d_uninitialize(&O2_P);
-      point3d_uninitialize (&O5_P);
-      point3d_uninitialize (&O4_P);
-      point3d_uninitialize (&P);
       int C1_Pii = -1;
       int C2_Pii = -1;
       int C3_Pii = -1;
@@ -2292,7 +2125,7 @@ void pentose_sugar_addh(struct residue* res){
       if (count != 10)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found in %s (%d-%s%c)\n", __func__, res->name, res->atoms[0].resid, res->atoms[0].chain, res->atoms[0].ins[0]);
-	    //	    
+	    //	   exit(EXIT_FAILURE);
       }
 
       double adjust = torad(120.0);
@@ -2333,17 +2166,6 @@ void ade_addh(struct residue *res)
       Point3d N9;
       Point3d C6;
       Point3d N6;
-
-      point3d_uninitialize (&N1);
-      point3d_uninitialize (&C2);
-      point3d_uninitialize (&N3);
-      point3d_uninitialize (&C4);
-      point3d_uninitialize (&C5);
-      point3d_uninitialize (&N7);
-      point3d_uninitialize (&C8);
-      point3d_uninitialize (&N9);
-      point3d_uninitialize (&C6);
-      point3d_uninitialize (&N6);
 
       int  N1ii = -1;
       int  C2ii = -1;
@@ -2434,7 +2256,7 @@ void ade_addh(struct residue *res)
       if (count != 10)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
       double tors_ang = torsion_angle(N1,C2,N3,C4);
 
@@ -2465,16 +2287,6 @@ void gua_addh(struct residue *res)
       Point3d C5;
       Point3d C6;
       Point3d C8;
-
-      point3d_uninitialize (&N1);
-      point3d_uninitialize (&N2);
-      point3d_uninitialize (&N7);
-      point3d_uninitialize (&N9);
-      point3d_uninitialize (&C2);
-      point3d_uninitialize (&C5);
-      point3d_uninitialize (&C6);
-      point3d_uninitialize (&C8);
-
 
       int  N1ii = -1;
       int  N2ii = -1;
@@ -2550,7 +2362,7 @@ void gua_addh(struct residue *res)
       if (count != 8)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
-	     
+	    exit(EXIT_FAILURE);
       }
 
       double adjust = torad(120.0);
@@ -2581,13 +2393,6 @@ void cyt_addh(struct residue *res)
       Point3d C5;
       Point3d C6;
       Point3d C4;
-
-      point3d_uninitialize (&N1);
-      point3d_uninitialize (&N3);
-      point3d_uninitialize (&N4);
-      point3d_uninitialize (&C5);
-      point3d_uninitialize (&C6);
-      point3d_uninitialize (&C4);
 
       int N1ii = -1;
       int  N3ii = -1;
@@ -2648,7 +2453,7 @@ void cyt_addh(struct residue *res)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
 	    return;
-	     
+	    exit(EXIT_FAILURE);
       }
 
       double adjust = torad(120.0);
@@ -2678,14 +2483,6 @@ void thy_addh(struct residue *res)
       Point3d C6;
       Point3d C4;
       Point3d C7;
-
-      point3d_uninitialize (&N1);
-      point3d_uninitialize (&N3);
-      point3d_uninitialize (&C5);
-      point3d_uninitialize (&C2);
-      point3d_uninitialize (&C6);
-      point3d_uninitialize (&C4);
-      point3d_uninitialize (&C7);
 
       int  N1ii = -1;
       int  N3ii = -1;
@@ -2753,7 +2550,7 @@ void thy_addh(struct residue *res)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
 	    //  return;
-	     
+	    exit(EXIT_FAILURE);
       }
       double adjust = torad(120.0);
       double hbangle = torad(106.97);
@@ -2784,13 +2581,6 @@ void ura_addh(struct residue *res)
       Point3d C2;
       Point3d C6;
       Point3d C4;
-
-      point3d_uninitialize (&N1);
-      point3d_uninitialize (&N3);
-      point3d_uninitialize (&C5);
-      point3d_uninitialize (&C2);
-      point3d_uninitialize (&C6);
-      point3d_uninitialize (&C4);
 
       int  N1ii = -1;
       int  N3ii = -1;
@@ -2853,7 +2643,7 @@ void ura_addh(struct residue *res)
       { /* Exception Handling */
 	    fprintf(stderr, "Error in function %s()... All required atoms not found %d\n", __func__, count);
 	    //  return;
-	     
+	    exit(EXIT_FAILURE);
       }
 
       double adjust = torad(120.0);

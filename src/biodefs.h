@@ -24,6 +24,9 @@
 
 #include "geom3d.h"
 
+#define TRUE  (1)
+#define FALSE (0)
+
 #define STD_HB_DIST 3.8
 #define STD_MG_BOND_DIST 2.7
 

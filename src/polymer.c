@@ -82,6 +82,9 @@ void residue_printpdb(FILE* fp, struct residue* res)
 }
 void residue_addh(struct residue* res, int precur_indx, Point3d position, char* h_name)
 {
+      if(Point3d_is_uninit(&position) == TRUE){
+          return;
+      }
       if(res->numh == MAX_HYDRO){    /* Exception Handling */ 
 	    fprintf(stderr, "Error in function %s()... hydrogen max limit encountered.\n", __func__);
 	    exit(EXIT_FAILURE);
@@ -94,6 +97,8 @@ void residue_addh(struct residue* res, int precur_indx, Point3d position, char* 
       res->H[res->numh].id = 0;
       res->precursor_index[res->numh] = precur_indx;
       res->numh = res->numh + 1;
+      return;
+      
 }
 void polymer_create(struct polymer* polymer, struct atom* atoms, int numatom){
 
