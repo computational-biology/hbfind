@@ -21,7 +21,7 @@ double todeg(double rad)
 
 void point3d_uninitialize(Point3d* point)
 {
-      point->x = -UNDEFINED_VAL-1.0;
+      point->x = UNDEFINED_VAL-1.0;
 }
 
 int  Point3d_is_uninit(Point3d* point){

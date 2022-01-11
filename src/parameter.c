@@ -22,7 +22,7 @@
 void param_init(struct parameter* args)
 {
       args->bio.occu = 'B';
-      args->bio.HH_dist = 2.00;
+      args->bio.HH_distsqr = 6.00;
       strcpy(args->sys.os, "linux");
 }
 
@@ -34,6 +34,10 @@ void process_argv(int argc, char* argv[], struct parameter* args, int file_index
 			args->bio.occu = 'S';
 			++i;
 		  }
+	    }else if(strncmp(argv[i], "-hhdist=", 8) == 0){
+		  double tmp1 = atof(argv[i]+ 8);
+		  args->bio.HH_distsqr = tmp1 * tmp1;
+		 printf("The val=%lf\n", args->bio.HH_distsqr); 
 	    }else{
 		  file_index[*file_count] = i;
 		  *file_count += 1;

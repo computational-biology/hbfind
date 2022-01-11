@@ -94,7 +94,7 @@ int main ( int argc, char *argv[] )
 	    struct site* sites;
 	    sites_init(&sites, polymer.numres);
 	    sites_build(sites, &polymer);
-	    find_hydro_clash(sites, polymer.numres);
+	    find_hydro_clash(sites, polymer.numres, &args);
 	    sites_free(&sites);
 	    FILE *outfp;										/* output-file pointer */
 	    char outfp_file_name[512];		/* output-file name    */

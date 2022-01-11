@@ -78,7 +78,7 @@ void sites_build(struct site* sites, struct polymer* poly ){
 
 }
 
-void site_hydro_clash(struct site* site)
+void site_hydro_clash(struct site* site, struct parameter* args)
 {
       struct residue* res1 = site->src;
       struct residue* res2;
@@ -90,7 +90,7 @@ void site_hydro_clash(struct site* site)
 		  for(int k=0; k<res2->numh; ++k){
 			double d2 = distsqr(res1->H[i].center, res2->H[k].center) ;
 			if( d2 <= 6.00 ){
-			      fprintf(stdout, "Clash found %lf\n", d2);
+			      fprintf(stdout, "Clash found in %s%s     dist=%lf\n", args->file.basename, args->file.ext, sqrt(d2));
 			      print_pdb_line(stdout, res1->H + i);
 			      print_pdb_line(stdout, res2->H + k);
 			}
@@ -98,11 +98,11 @@ void site_hydro_clash(struct site* site)
 	    }
       }
 }
-void find_hydro_clash(struct site* sites, int size)
+void find_hydro_clash(struct site* sites, int size, struct parameter* args)
 {
       struct residue* res;
       for(int i=0; i<size; ++i){
-	    site_hydro_clash(sites + i);
+	    site_hydro_clash(sites + i, args);
       }
 }
 

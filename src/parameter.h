@@ -15,6 +15,10 @@
  *
  * =====================================================================================
  */
+ 
+#ifndef  __parameter_H__
+#define  __parameter_H__
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -30,7 +34,7 @@ struct parameter{
       struct{
 	    double hbdist;
 	    char occu;
-	    double HH_dist;
+	    double HH_distsqr;
       }bio;
       struct{
 	    char os[10];
@@ -43,5 +47,5 @@ void param_init(struct parameter* args);
 
 void process_argv(int argc, char* argv[], struct parameter* args, int file_index[], int* file_count);
 
-
+#endif   /* ----- #ifndef __parameter_H__  ----- */
 

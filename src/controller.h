@@ -29,6 +29,7 @@
 #include "kdtree.h"
 #include "hbutil.h"
 #include "hbfind.h"
+#include "parameter.h"
 
 #define MAX_NN_RES (40)
 struct site{
@@ -54,7 +55,7 @@ void sites_free(struct site** sites);
 
 void exec_hbfind(struct polymer* poly);
 
-void find_hydro_clash(struct site* sites, int size);
+void find_hydro_clash(struct site* sites, int size, struct parameter* args);
 
 
 #endif   /* ----- #ifndef __controller_H__  ----- */
