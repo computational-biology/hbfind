@@ -120,7 +120,7 @@ static void kdt_node_neighbor(struct kdt_node* node, struct residue* key, int i,
 
       if(dist2 <= range2){
 	    if( *count >= maxnn ){    /* Exception Handling */ 
-		  fprintf(stderr, "Error in function %s()... too many neighbors found.\n", __func__);
+		  fprintf(stderr, "Error in function %s()... max neighbor encountered %d.\n", __func__, maxnn);
 		  exit(EXIT_FAILURE);
 	    }
 	    neighbors[*count] = node->key;

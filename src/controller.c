@@ -89,7 +89,7 @@ void site_hydro_clash(struct site* site, struct parameter* args)
 		  if(res1 == res2) continue;
 		  for(int k=0; k<res2->numh; ++k){
 			double d2 = distsqr(res1->H[i].center, res2->H[k].center) ;
-			if( d2 <= 6.00 ){
+			if( d2 <= args->bio.HH_distsqr ){
 			      fprintf(stdout, "Clash found in %s%s     dist=%lf\n", args->file.basename, args->file.ext, sqrt(d2));
 			      print_pdb_line(stdout, res1->H + i);
 			      print_pdb_line(stdout, res2->H + k);

@@ -31,7 +31,7 @@
 #include "hbfind.h"
 #include "parameter.h"
 
-#define MAX_NN_RES (40)
+#define MAX_NN_RES (100)
 struct site{
       struct residue* src;
       char name[5];

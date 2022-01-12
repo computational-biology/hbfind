@@ -78,6 +78,7 @@ int main ( int argc, char *argv[] )
 	    
 	    fname_split(args.file.path, args.file.basename, args.file.ext, args.file.full_name);
 	    //strcpy(args.file.ext, ".pdb");
+	    fprintf(stdout, "Started processing %s\n", args.file.basename);
 	    if(strcmp(args.file.ext, ".cif") == 0){
 		  scancif(args.file.full_name, all_residues, NULL, NULL, &atoms, &numatoms, ALL_TYPE, "label", args.bio.occu);
 	    }else if(strcmp(args.file.ext, ".pdb") ==0 ){
